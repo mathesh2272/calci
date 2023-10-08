@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Calculator</title>
+    <style>
+        #calculator {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 10px;
+            margin: 20px;
+        }
+
+        #display {
+            grid-column: 1 / -1;
+            padding: 10px;
+            background-color: #eee;
+            text-align: right;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        button {
+            font-size: 24px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .number {
+            background-color: #ddd;
+        }
+
+        .operator {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .clear {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .equal {
+            background-color: #2196F3;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="calculator">
+        <div id="display"></div>
+        <button class="number" value="7">7</button>
+        <button class="number" value="8">8</button>
+        <button class="number" value="9">9</button>
+        <button class="operator" value="+">+</button>
+        <button class="number" value="4">4</button>
+        <button class="number" value="5">5</button>
+        <button class="number" value="6">6</button>
+        <button class="operator" value="-">-</button>
+        <button class="number" value="1">1</button>
+        <button class="number" value="2">2</button>
+        <button class="number" value="3">3</button>
+        <button class="operator" value="*">*</button>
+        <button class="number" value="0">0</button>
+        <button class="number" value=".">.</button>
+        <button class="clear" value="AC">AC</button>
+        <button class="operator" value="/">/</button>
+        <button class="equal" value="=">=</button>
+    </div>
+    <script>
+        const display = document.getElementById('display');
+        const buttons = document.querySelectorAll('button');
+        let currentNumber = '';
+        let previousNumber = '';
+        let operator = '';
+
+        function handleButtonClick(event) {
+            const button = event.target;
+            const value = button.value;
+            if (button.classList.contains('number')) {
+                handleNumberClick(value);
+            } else if (button.classList.contains('operator')) {
+                handleOperatorClick(value);
+            } else if (button.classList.contains('clear')) {
+                handleClearClick();
+            } else if (button.classList.contains('equal')) {
+                handleEqualClick();
+            }
+        }
+
+        function handleNumberClick(value) {
+            currentNumber += value;
+            display.textContent = currentNumber;
+        }
+
+        function handleOperatorClick(value) {
+            if (operator !== '') {
+                performCalculation();
+            }
+            operator = value;
+            previousNumber = currentNumber;
+            currentNumber = '';
+        }
+
+        function handleClearClick() {
+            currentNumber = '';
+            previousNumber = '';
+            operator = '';
+            display.textContent = '';
+        }
+
+        function handleEqualClick() {
+            performCalculation();
+            operator = '';
+        }
+
+        function performCalculation() {
+            if (previousNumber === '' || currentNumber === '') {
+                return;
+            }
+            const num1 = parseFloat(previousNumber);
+            const num2 = parseFloat(currentNumber);
+            let result;
+            switch (operator) {
+                case '+':
+                    result = num1 + num2;
+                    break;
+                case '-':
+                    result = num1 - num2;
+                    break;
+                case '*':
+                    result = num1 * num2;
+                    break;
+                case '/':
+                    result = num1 / num2;
+                    break;
+                default:
+                    return;
+            }
+            currentNumber = result.toString();
+            previousNumber = '';
+            display.textContent = currentNumber;
+        }
+
+        buttons.forEach(button => button.addEventListener('click', handleButtonClick));
+
+    </script>
+</body>
+
+</html>
